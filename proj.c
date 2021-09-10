@@ -88,7 +88,53 @@ void sort1()
 {
 
 }
+void displaymatrix(int G[][50]) {
+    //displaying of matrix
+    int i, j, max = 0, conf = 0;
+    for (i = 0; i < 50; i++) {
+        for (j = 0; j < 50; j++) {
+            int num = G[i][j];
+            if (num == NULL) {
+
+            }
+            else {
+                if (max < j) {
+                printf("%d i % d j % d\n", G[i][j], i, j);
+                printf("J %d max %d\n", j, max);
+                max = j;
+                conf = 1;
+                }
+                if (max < i) {
+                printf("I %d max %d\n", i, max);
+                
+                max = i;
+                conf = 0;
+            }
+            }
+            
+        } 
+        
+        
+    }
+    max = max + 1;
+    printf("asd %d\n", max);
+    for (i = 0; i < max; i++) {
+        for (j = 0; j < max; j++) {
+            int nas = G[i][j];
+            if (nas == NULL) {
+                printf(". ");
+            }
+            else {
+                printf("%d ", nas);
+            }
+            
+        }
+        printf("\n");
+    }
+}
+
 void innitgraph(int G[][50], FILE* F) {
+    //file reading
     FILE* stream2 = fopen("12_2.csv", "r");
     if (F== NULL) {
         printf("Unable");
@@ -108,7 +154,7 @@ void innitgraph(int G[][50], FILE* F) {
             int numb = atoi(tmp);
            
             if (san == 1 && counters == 2) {
-                
+                //getting the number of vertices
                 vert = numb;
             }
             tmp = strtok(NULL, ",");
@@ -127,7 +173,7 @@ void innitgraph(int G[][50], FILE* F) {
         
         char* tmp2 = strtok(line, ",");
         while(tmp2 != NULL) {
-            
+            //adding of weights according to their vertices
             sans2++;
             if (counter > 2) {
                 if (sans2 == 1) {
