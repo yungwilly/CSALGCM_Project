@@ -35,12 +35,14 @@ void bellmanford(struct Graph *g, int source) {
   //predecessor array
   //size equal to the number of vertices of the graph g
   int p[tV];
-
+  
+  printf("Gan %d %d \n", tV, tE);
   //step 1: fill the distance array and predecessor array
   for (i = 0; i < tV; i++) {
     d[i] = INFINITY;
     p[i] = 0;
   }
+  printf("Junifer\n");
 
   //mark the source vertex
   d[source] = 0;
@@ -52,13 +54,18 @@ void bellmanford(struct Graph *g, int source) {
       u = g->edge[j].u;
       v = g->edge[j].v;
       w = g->edge[j].w;
-
+      //printf("Checkers %d %d %d \n", u, v, w);
       if (d[u] != INFINITY && d[v] > d[u] + w) {
         d[v] = d[u] + w;
         p[v] = u;
       }
     }
+    printf("Iteration %d Distance array: ", i);
+    display(d, tV);
+    printf("Iteration %d Predecessor array: ", i);
+    display(p, tV);
   }
+  printf("Jack\n");
 
   //step 3: detect negative cycle
   //if value changes then we have a negative cycle in the graph
@@ -72,12 +79,13 @@ void bellmanford(struct Graph *g, int source) {
       return;
     }
   }
+  printf("Guy in woods\n");
 
   //No negative weight cycle found!
   //print the distance and predecessor array
-  printf("Distance array: ");
+  printf("Final Distance array: ");
   display(d, tV);
-  printf("Predecessor array: ");
+  printf("Final Predecessor array: ");
   display(p, tV);
 }
 void sort2()
@@ -87,6 +95,37 @@ void sort2()
 void sort1()
 {
 
+}
+void bellfordinitial(int G[][50] , int vert, int edges) {
+  printf("Hello zap\n");
+  int i, j, edg2 = 0;
+  
+  struct Graph *g = (struct Graph *)malloc(sizeof(struct Graph));
+  printf("Struct\n");
+  g->V = vert;
+  g->E = edges;
+   g->edge = (struct Edge *)malloc(g->E * sizeof(struct Edge));
+   printf("Bellford\n");
+  for (i = 0; i < edges; i++) {
+    for (j = 0; j < edges; j++) {
+       int nas = G[i][j];
+       if (nas == NULL) {
+       
+
+       }
+       else {
+         printf("AMAZING WORLD\n");
+          g->edge[edg2].u = i;
+          g->edge[edg2].v = j;
+          g->edge[edg2].w = nas;
+          edg2++;
+       }
+
+    }
+    
+  }
+  printf("Hello ford\n");
+  bellmanford(g, 0);
 }
 void displaymatrix(int G[][50]) {
     //displaying of matrix
@@ -135,7 +174,7 @@ void displaymatrix(int G[][50]) {
 
 void innitgraph(int G[][50], FILE* F) {
     //file reading
-    FILE* stream2 = fopen("12_2.csv", "r");
+    FILE* stream2 = fopen("20_1.csv", "r");
     if (F== NULL) {
         printf("Unable");
         exit(1);
@@ -166,7 +205,7 @@ void innitgraph(int G[][50], FILE* F) {
         free(tmp);
         
     }
-    int sans2 = 0, counter = 0, first = 0, sec = 0;
+    int sans2 = 0, counter = 0, first = 0, sec = 0, edges = 0;
     while (fgets(line, sizeof(line), stream2))
     {
         counter++;
@@ -186,6 +225,7 @@ void innitgraph(int G[][50], FILE* F) {
                 else {
                     int num = atoi(tmp2);
                     G[first][sec] = num;
+                    edges++;
                 }
                 
             }
@@ -195,14 +235,16 @@ void innitgraph(int G[][50], FILE* F) {
         sans2 = 0;
         free(tmp2);
     }
-    displaymatrix(G);
+    printf("Hello bellford\n");
+    //displaymatrix(G);
+    bellfordinitial(G, vert, edges);
 }
 int main()
 {
     printf("Hello world\n");
     printf("I am the bone of my sword");
     
-    FILE* stream = fopen("12_2.csv", "r");
+    FILE* stream = fopen("20_1.csv", "r");
     int G[50][50], i, j;
     for (i = 0; i < 50; i++) {
         for (j = 0; j < 50; j++) {
