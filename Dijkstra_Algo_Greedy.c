@@ -108,7 +108,7 @@ int main()
 	char line[100];  /* declare a char array */
 
 FILE *file;  /* declare a FILE pointer  */
-file = fopen("12_2.csv", "r");  /* open a text file for reading */
+file = fopen("14_2.csv", "r");  /* open a text file for reading */
 	
   	while(fgets(line, sizeof line, file)!=NULL) {       /* keep looping until NULL pointer... */
 		column = 0;
