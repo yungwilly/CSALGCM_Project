@@ -54,13 +54,13 @@ void bellmanford(struct Graph *g, int source) {
   //size equal to the number of vertices of the graph g
   int p[tV];
   
-  printf("Gan %d %d \n", tV, tE);
+ 
   //step 1: fill the distance array and predecessor array
   for (i = 0; i < tV; i++) {
     d[i] = INFINITY;
     p[i] = 0;
   }
-  printf("Junifer\n");
+ 
 
   //mark the source vertex
   d[source] = 0;
@@ -97,7 +97,7 @@ void bellmanford(struct Graph *g, int source) {
       return;
     }
   }
-  printf("Guy in woods\n");
+
 
   //No negative weight cycle found!
   //print the distance and predecessor array
@@ -192,7 +192,7 @@ void displaymatrix(int G[][50]) {
 
 void innitgraph(int G[][50], FILE* F) {
     //file reading
-    FILE* stream2 = fopen("14_2.csv", "r");
+    FILE* stream2 = fopen("14_2.csv", "r");//CHANGE FILE
     if (F== NULL) {
         printf("Unable");
         exit(1);
@@ -303,7 +303,7 @@ void dij_dynamic() {
 	char line[100];  /* declare a char array */
 
 FILE *file;  /* declare a FILE pointer  */
-file = fopen("14_2.csv", "r");  /* open a text file for reading */
+file = fopen("14_2.csv", "r");  /* open a text file for reading */ //CHANGE FILE
 	
   	while(fgets(line, sizeof line, file)!=NULL) {       /* keep looping until NULL pointer... */
 		column = 0;
@@ -353,14 +353,27 @@ file = fopen("14_2.csv", "r");  /* open a text file for reading */
 
 }
 //dijkstra greedy
+int ** createZeroMatrix(int n){
+	int ** array = (int**)malloc(n*sizeof(int *));	
+	int i,j;
+	for(i = 0;i < n; i++) {
+	    	array[i] = (int*)malloc(n*sizeof(int));
+   	 	for(j = 0; j < n; j++) {
+	        	array[i][j] = 0;
+	    	}
+	}
+	return array;
+}
+
+
 // A utility function to find the vertex with minimum distance value, from
 // the set of vertices not yet included in shortest path tree
-int minDistance(int dist[], bool sptSet[])
+int minDistance(int dist[], bool sptSet[], int V)
 {
 	// Initialize min value
 	int min = INT_MAX, min_index;
 	int v;
-	for (v = 0; v < VX; v++)
+	for (v = 0; v < V; v++)
 		if (sptSet[v] == false && dist[v] <= min)
 			min = dist[v], min_index = v;
 
@@ -368,22 +381,15 @@ int minDistance(int dist[], bool sptSet[])
 }
 
 // A utility function to print the constructed distance array
-void printSolution(int dist[])
+void printSolution(int dist[],int V)
 {
 	printf("Vertex \t\t Distance from Source\n");
 	int i;
-	for (i = 0; i < VX; i++)
+	for (i = 0; i < V; i++)
 		printf("%d \t\t %d\n", i, dist[i]);
 }
 
-void initGraph(int AdjMatrix[][VX],int nSize){
- int i, j;
-  for (i = 0; i < nSize; i++)
-    for (j = 0; j < nSize; j++)
-      AdjMatrix[i][j] = 0;	
-}
-
-void UndirectedMatix(int AdjMatrix[][VX], int nSize, int matrixSize, int col1[], int col2[], int col3[]) {
+void UndirectedMatix(int ** AdjMatrix, int nSize, int matrixSize, int col1[], int col2[], int col3[]) {
   int i,x = 0,y = 0,key = 0;
 	
 	for(i = 1; i < nSize; i++){
@@ -397,17 +403,17 @@ void UndirectedMatix(int AdjMatrix[][VX], int nSize, int matrixSize, int col1[],
 
 // Function that implements Dijkstra's single source shortest path algorithm
 // for a graph represented using adjacency matrix representation
-void dijkstra_greedy(int graph[VX][VX], int src)
+void dijkstra_greedy(int ** AdjMatrix, int src, int V)
 {
-	int dist[VX]; // The output array. dist[i] will hold the shortest
+	int dist[V]; // The output array. dist[i] will hold the shortest
 	// distance from src to i
 
-	bool sptSet[VX]; // sptSet[i] will be true if vertex i is included in shortest
+	bool sptSet[V]; // sptSet[i] will be true if vertex i is included in shortest
 	// path tree or shortest distance from src to i is finalized
 
 	// Initialize all distances as INFINITE and stpSet[] as false
 	int i;
-	for (i = 0; i < VX; i++)
+	for (i = 0; i < V; i++)
 		dist[i] = INT_MAX, sptSet[i] = false;
 
 	// Distance of source vertex from itself is always 0
@@ -415,29 +421,30 @@ void dijkstra_greedy(int graph[VX][VX], int src)
 
 	// Find shortest path for all vertices
 	int count;
-	for (count = 0; count < VX - 1; count++) {
+	for (count = 0; count < V - 1; count++) {
 		// Pick the minimum distance vertex from the set of vertices not
 		// yet processed. u is always equal to src in the first iteration.
-		int u = minDistance(dist, sptSet);
+		int u = minDistance(dist, sptSet,V);
 
 		// Mark the picked vertex as processed
 		sptSet[u] = true;
 
 		// Update dist value of the adjacent vertices of the picked vertex.
 		int v;
-		for (v = 0; v < VX; v++)
+		for (v = 0; v < V; v++)
 
 			// Update dist[v] only if is not in sptSet, there is an edge from
 			// u to v, and total weight of path from src to v through u is
 			// smaller than current value of dist[v]
-			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
-				&& dist[u] + graph[u][v] < dist[v])
-				dist[v] = dist[u] + graph[u][v];
+			if (!sptSet[v] && AdjMatrix[u][v] && dist[u] != INT_MAX
+				&& dist[u] + AdjMatrix[u][v] < dist[v])
+				dist[v] = dist[u] + AdjMatrix[u][v];
 	}
 
 	// print the constructed distance array
-	printSolution(dist);
+	printSolution(dist,V);
 }
+
 void dij_greed() {
   int  i=0, row = 0, column = 0;
 	int col1[100];
@@ -447,10 +454,9 @@ void dij_greed() {
 	char line[100];  /* declare a char array */
 
 FILE *file;  /* declare a FILE pointer  */
-file = fopen("14_2.csv", "r");  /* open a text file for reading */
+file = fopen("14_2.csv", "r");  /* open a text file for reading */  //CHANGE FILE
 	
   	while(fgets(line, sizeof line, file)!=NULL) {       /* keep looping until NULL pointer... */
-		 printf("Lines of numbers.txt file are: %s", line);
 		column = 0;
 		row++;
 		
@@ -479,13 +485,12 @@ file = fopen("14_2.csv", "r");  /* open a text file for reading */
     } 
 	int nSize = i;
 	int matrixSize = col1[0];
-	int AdjMatrix[matrixSize][matrixSize];  
-	printf("\n\n");
-	
-	initGraph(AdjMatrix,matrixSize);
+	int **AdjMatrix = createZeroMatrix(matrixSize);
+
 	UndirectedMatix(AdjMatrix,nSize,matrixSize,col1,col2,col3);
 	
-	dijkstra_greedy(AdjMatrix, 0);
+	dijkstra_greedy(AdjMatrix, 0,matrixSize);
+
 }
 int main()
 {
@@ -497,7 +502,7 @@ int main()
     printf("Hello world\n");
     printf("I am the bone of my sword");
     
-    FILE* stream = fopen("14_2.csv", "r");
+    FILE* stream = fopen("14_2.csv", "r"); //CHANGE FILE
     int G[50][50], i, j;
     for (i = 0; i < 50; i++) {
         for (j = 0; j < 50; j++) {
