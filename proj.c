@@ -174,7 +174,7 @@ void displaymatrix(int G[][50]) {
 
 void innitgraph(int G[][50], FILE* F) {
     //file reading
-    FILE* stream2 = fopen("20_1.csv", "r");
+    FILE* stream2 = fopen("14_2.csv", "r");
     if (F== NULL) {
         printf("Unable");
         exit(1);
@@ -244,7 +244,7 @@ int main()
     printf("Hello world\n");
     printf("I am the bone of my sword");
     
-    FILE* stream = fopen("20_1.csv", "r");
+    FILE* stream = fopen("14_2.csv", "r");
     int G[50][50], i, j;
     for (i = 0; i < 50; i++) {
         for (j = 0; j < 50; j++) {
