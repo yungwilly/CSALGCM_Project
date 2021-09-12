@@ -1,6 +1,12 @@
+#include <limits.h>
+#include <stdbool.h>
+#include <conio.h>
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#define VX 9
 #define INFINITY 99999
+#define INF 99999
 struct Edge {
   int u;  //start vertex of the edge
   int v;  //end vertex of the edge
@@ -10,6 +16,18 @@ struct Graph {
   int V;        //total number of vertices in the graph
   int E;        //total number of edges in the graph
   struct Edge *edge;  //array of edges
+};
+struct Edge2 {
+  int src;  //start vertex of the edge
+  int dest;  //end vertex of the edge
+  int weight;  //weight of the edge (u,v)
+};
+
+//Graph - it consists of edges
+struct Graph2 {
+  int V;        //total number of vertices in the graph
+  int E;        //total number of edges in the graph
+  struct Edge2 *edge2;  //array of edges
 };
 void display(int arr[], int size) {
   int i;
@@ -239,8 +257,243 @@ void innitgraph(int G[][50], FILE* F) {
     //displaymatrix(G);
     bellfordinitial(G, vert, edges);
 }
+//dynamic dijkstra
+void displaydij_dynamic(int arr[], int size) {
+  int i;
+  printf("Vertex   Distance from Source\n");
+    for (i = 0; i < size; ++i)
+        printf("%d \t\t %d\n", i, arr[i]);
+}
+//dijkstra dynamic functions
+void dijkstra_dynamic(struct Graph2 *graph, int src) {
+
+  int i, j, u, v, w;
+  int totalV = graph->V;
+  int totalE = graph->E;
+  int dest[totalV];
+
+  for (i = 0; i < totalV; i++) {
+    dest[i] = INF;
+  }
+  dest[src] = 0;
+
+
+  for (i = 1; i <= totalV - 1; i++) {
+    for (j = 0; j < totalE; j++) {
+      //get the edge data
+      u = graph->edge2[j].src;
+      v = graph->edge2[j].dest;
+      w = graph->edge2[j].weight;
+
+      if (dest[u] != INF && dest[v] > dest[u] + w) {
+        dest[v] = dest[u] + w;
+      }
+    }
+  }
+
+  displaydij_dynamic(dest, totalV);
+
+}
+void dij_dynamic() {
+  int  i=0,totalNums, row = 0, column = 0;
+	int col1[100];
+	int col2[100];
+	int col3[100];
+	int atoi ( const char * str ); 
+	char line[100];  /* declare a char array */
+
+FILE *file;  /* declare a FILE pointer  */
+file = fopen("14_2.csv", "r");  /* open a text file for reading */
+	
+  	while(fgets(line, sizeof line, file)!=NULL) {       /* keep looping until NULL pointer... */
+		column = 0;
+		row++;
+		
+		if (row == 1){
+			continue;
+		}
+		
+		char* temp = strtok(line, ",");
+		
+		while(temp != NULL){
+			if(column == 0){
+			col1[i] = atoi(temp);
+
+			}
+			if(column == 1){
+				col2[i] = atoi(temp);
+			}
+			if(column == 2){
+				col3[i] = atoi(temp);
+			}
+			
+			temp = strtok(NULL, ",");
+	        column++; 
+		}
+		i++;
+    } 
+    totalNums = i;  
+    
+  //create graph
+  struct Graph2 *graph = (struct Graph2 *)malloc(sizeof(struct Graph2));
+  graph->V = col1[0];  //total vertices
+  graph->E = totalNums-1;  //total edges
+
+  //array of edges for graph
+  graph->edge2 = (struct Edge2 *)malloc(graph->E * sizeof(struct Edge2));
+	
+	int k;
+	for(k = 0; k < graph->E; k++){
+		graph->edge2[k].src = col1[k+1];
+		graph->edge2[k].dest = col2[k+1];
+		graph->edge2[k].weight = col3[k+1];
+	}
+
+  dijkstra_dynamic(graph, 0);  //0 is the source vertex
+
+}
+//dijkstra greedy
+// A utility function to find the vertex with minimum distance value, from
+// the set of vertices not yet included in shortest path tree
+int minDistance(int dist[], bool sptSet[])
+{
+	// Initialize min value
+	int min = INT_MAX, min_index;
+	int v;
+	for (v = 0; v < VX; v++)
+		if (sptSet[v] == false && dist[v] <= min)
+			min = dist[v], min_index = v;
+
+	return min_index;
+}
+
+// A utility function to print the constructed distance array
+void printSolution(int dist[])
+{
+	printf("Vertex \t\t Distance from Source\n");
+	int i;
+	for (i = 0; i < VX; i++)
+		printf("%d \t\t %d\n", i, dist[i]);
+}
+
+void initGraph(int AdjMatrix[][VX],int nSize){
+ int i, j;
+  for (i = 0; i < nSize; i++)
+    for (j = 0; j < nSize; j++)
+      AdjMatrix[i][j] = 0;	
+}
+
+void UndirectedMatix(int AdjMatrix[][VX], int nSize, int matrixSize, int col1[], int col2[], int col3[]) {
+  int i,x = 0,y = 0,key = 0;
+	
+	for(i = 1; i < nSize; i++){
+		x = col1[i];
+		y = col2[i];
+		key = col3[i];
+		AdjMatrix[x][y] = key;
+		AdjMatrix[y][x] = key;
+	}
+}
+
+// Function that implements Dijkstra's single source shortest path algorithm
+// for a graph represented using adjacency matrix representation
+void dijkstra_greedy(int graph[VX][VX], int src)
+{
+	int dist[VX]; // The output array. dist[i] will hold the shortest
+	// distance from src to i
+
+	bool sptSet[VX]; // sptSet[i] will be true if vertex i is included in shortest
+	// path tree or shortest distance from src to i is finalized
+
+	// Initialize all distances as INFINITE and stpSet[] as false
+	int i;
+	for (i = 0; i < VX; i++)
+		dist[i] = INT_MAX, sptSet[i] = false;
+
+	// Distance of source vertex from itself is always 0
+	dist[src] = 0;
+
+	// Find shortest path for all vertices
+	int count;
+	for (count = 0; count < VX - 1; count++) {
+		// Pick the minimum distance vertex from the set of vertices not
+		// yet processed. u is always equal to src in the first iteration.
+		int u = minDistance(dist, sptSet);
+
+		// Mark the picked vertex as processed
+		sptSet[u] = true;
+
+		// Update dist value of the adjacent vertices of the picked vertex.
+		int v;
+		for (v = 0; v < VX; v++)
+
+			// Update dist[v] only if is not in sptSet, there is an edge from
+			// u to v, and total weight of path from src to v through u is
+			// smaller than current value of dist[v]
+			if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX
+				&& dist[u] + graph[u][v] < dist[v])
+				dist[v] = dist[u] + graph[u][v];
+	}
+
+	// print the constructed distance array
+	printSolution(dist);
+}
+void dij_greed() {
+  int  i=0, row = 0, column = 0;
+	int col1[100];
+	int col2[100];
+	int col3[100];
+	int atoi ( const char * str ); 
+	char line[100];  /* declare a char array */
+
+FILE *file;  /* declare a FILE pointer  */
+file = fopen("14_2.csv", "r");  /* open a text file for reading */
+	
+  	while(fgets(line, sizeof line, file)!=NULL) {       /* keep looping until NULL pointer... */
+		 printf("Lines of numbers.txt file are: %s", line);
+		column = 0;
+		row++;
+		
+		if (row == 1){
+			continue;
+		}
+		
+		char* temp = strtok(line, ",");
+		
+		while(temp != NULL){
+			if(column == 0){
+			col1[i] = atoi(temp);
+
+			}
+			if(column == 1){
+				col2[i] = atoi(temp);
+			}
+			if(column == 2){
+				col3[i] = atoi(temp);
+			}
+			
+			temp = strtok(NULL, ",");
+	        column++; 
+		}
+		i++;
+    } 
+	int nSize = i;
+	int matrixSize = col1[0];
+	int AdjMatrix[matrixSize][matrixSize];  
+	printf("\n\n");
+	
+	initGraph(AdjMatrix,matrixSize);
+	UndirectedMatix(AdjMatrix,nSize,matrixSize,col1,col2,col3);
+	
+	dijkstra_greedy(AdjMatrix, 0);
+}
 int main()
 {
+  printf("Greedy Dijkstra\n");
+  dij_greed();
+  printf("Dynamic Dijkstra\n");
+  dij_dynamic();
+  printf("Bellford\n");
     printf("Hello world\n");
     printf("I am the bone of my sword");
     
