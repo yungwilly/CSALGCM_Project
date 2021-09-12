@@ -1,3 +1,3 @@
 # CSALGCM_Project
 
-Run proj.c
+The source code to be ran is "proj.c"
