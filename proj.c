@@ -32,7 +32,7 @@ struct Graph2 {
 void display(int arr[], int size) {
   int i;
   for (i = 0; i < size; i++) {
-    printf("%d ", arr[i]);
+    printf("Vertix %d %d\n", i, arr[i]);
   }
   printf("\n");
 }
@@ -78,12 +78,12 @@ void bellmanford(struct Graph *g, int source) {
         p[v] = u;
       }
     }
-    printf("Iteration %d Distance array: ", i);
+    printf("Iteration %d Distance array: \n", i);
     display(d, tV);
-    printf("Iteration %d Predecessor array: ", i);
+    printf("Iteration %d Predecessor array: \n", i);
     display(p, tV);
   }
-  printf("Jack\n");
+  
 
   //step 3: detect negative cycle
   //if value changes then we have a negative cycle in the graph
@@ -101,9 +101,9 @@ void bellmanford(struct Graph *g, int source) {
 
   //No negative weight cycle found!
   //print the distance and predecessor array
-  printf("Final Distance array: ");
+  printf("Final Distance array: \n");
   display(d, tV);
-  printf("Final Predecessor array: ");
+  printf("Final Predecessor array: \n");
   display(p, tV);
 }
 void sort2()
@@ -132,7 +132,7 @@ void bellfordinitial(int G[][50] , int vert, int edges) {
 
        }
        else {
-         printf("AMAZING WORLD\n");
+        
           g->edge[edg2].u = i;
           g->edge[edg2].v = j;
           g->edge[edg2].w = nas;
@@ -142,7 +142,7 @@ void bellfordinitial(int G[][50] , int vert, int edges) {
     }
     
   }
-  printf("Hello ford\n");
+
   bellmanford(g, 0);
 }
 void displaymatrix(int G[][50]) {
@@ -499,8 +499,7 @@ int main()
   printf("Dynamic Dijkstra\n");
   dij_dynamic();
   printf("Bellford\n");
-    printf("Hello world\n");
-    printf("I am the bone of my sword");
+    
     
     FILE* stream = fopen("14_2.csv", "r"); //CHANGE FILE
     int G[50][50], i, j;
