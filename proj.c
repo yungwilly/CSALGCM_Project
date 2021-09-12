@@ -193,7 +193,7 @@ void displaymatrix(int G[][50]) {
 
 void innitgraph(int G[][50], FILE* F) {
     //file reading
-    FILE* stream2 = fopen("5_2.csv", "r");//CHANGE FILE
+    FILE* stream2 = fopen("12_2.csv", "r");//CHANGE FILE
     if (F== NULL) {
         printf("Unable");
         exit(1);
@@ -304,7 +304,7 @@ void dij_dynamic() {
 	char line[100];  /* declare a char array */
 
 FILE *file;  /* declare a FILE pointer  */
-file = fopen("5_2.csv", "r");  /* open a text file for reading */ //CHANGE FILE
+file = fopen("12_2.csv", "r");  /* open a text file for reading */ //CHANGE FILE
 	
   	while(fgets(line, sizeof line, file)!=NULL) {       /* keep looping until NULL pointer... */
 		column = 0;
@@ -455,7 +455,7 @@ void dij_greed() {
 	char line[100];  /* declare a char array */
 
 FILE *file;  /* declare a FILE pointer  */
-file = fopen("5_2.csv", "r");  /* open a text file for reading */  //CHANGE FILE
+file = fopen("12_2.csv", "r");  /* open a text file for reading */  //CHANGE FILE
 	
   	while(fgets(line, sizeof line, file)!=NULL) {       /* keep looping until NULL pointer... */
 		column = 0;
@@ -495,16 +495,16 @@ file = fopen("5_2.csv", "r");  /* open a text file for reading */  //CHANGE FILE
 }
 int main()
 {
-	struct timeval st, et;
-	gettimeofday(&st,NULL);
+//	struct timeval st, et;
+//	gettimeofday(&st,NULL);
   printf("Greedy Dijkstra\n");
-//dij_greed();
+dij_greed();
   printf("Dynamic Dijkstra\n");
-//dij_dynamic();
+dij_dynamic();
   printf("Bellford\n");
     
     
-    FILE* stream = fopen("5_2.csv", "r"); //CHANGE FILE
+    FILE* stream = fopen("12_2.csv", "r"); //CHANGE FILE
     int G[50][50], i, j;
     for (i = 0; i < 50; i++) {
         for (j = 0; j < 50; j++) {
@@ -512,10 +512,10 @@ int main()
         }
     }
     innitgraph(G, stream);
-    gettimeofday(&et,NULL);
-    
-    int elapsed = ((et.tv_sec - st.tv_sec) * 1000000) + (et.tv_usec - st.tv_usec);
-    printf("Sorting time: %d micro seconds\n", elapsed);
+//    gettimeofday(&et,NULL);
+//    
+//    int elapsed = ((et.tv_sec - st.tv_sec) * 1000000) + (et.tv_usec - st.tv_usec);
+//    printf("Sorting time: %d micro seconds\n", elapsed);
    
     return 0;
 }
